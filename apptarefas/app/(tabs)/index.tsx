@@ -64,28 +64,48 @@ export default function HomeScreen() {
     }
   };
 
+  const excluirTarefa = async (tarefa) => {
+    try {
+      await fetch(`${URL}/${tarefa.objectId}`, {
+        method: 'DELETE',
+        headers,
+      });
+      buscarTarefas();
+    } catch (error) {
+      console.error('Erro ao excluir tarefa:', error.message);
+    }
+  };
+
   useEffect(() => {
     buscarTarefas();
   }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity
+    <View
       style={[
         styles.tarefaContainer,
         item.concluida && { borderLeftColor: '#22c55e', backgroundColor: '#e7fbe9' },
       ]}
-      onPress={() => alternarConclusao(item)} // ← Atualiza no Back4App na hora
     >
-      <Text
-        style={[
-          styles.tarefaTexto,
-          item.concluida && styles.tarefaConcluida,
-        ]}
+      <TouchableOpacity
+        onPress={() => alternarConclusao(item)}
+        style={{ flex: 1 }}
       >
-        {item.concluida ? '✅ ' : '⏳ '}
-        {item.descricao}
-      </Text>
-    </TouchableOpacity>
+        <Text
+          style={[
+            styles.tarefaTexto,
+            item.concluida && styles.tarefaConcluida,
+          ]}
+        >
+          {item.concluida ? '✅ ' : '⏳ '}
+          {item.descricao}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => excluirTarefa(item)}>
+        <Text style={styles.excluirTexto}>🗑️</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   return (
@@ -178,6 +198,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
   tarefaTexto: {
     fontSize: 16,
@@ -187,6 +210,11 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     color: '#6b7280',
   },
+  excluirTexto: {
+    fontSize: 20,
+    color: '#ef4444',
+    paddingHorizontal: 5,
+  },
   vazio: {
     fontSize: 16,
     color: '#64748b',
@@ -195,3 +223,4 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
+
