@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "expo": "^52.0.44",
     "react-native-linear-gradient": "^2.8.3"
+  },
+  "devDependencies": {
+    "@react-native-community/cli": "^18.0.0"
   }
 }
